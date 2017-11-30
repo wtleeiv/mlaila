@@ -1,0 +1,82 @@
+* factoids
+rows: output dim
+cols: input dim
+
+full rank: map all input to unique output
+* norm (length)
+x*T x = |x|^2
+squared length
+dot product w/ self
+
+|A|^2 = A^T A
+note: used in Linear Least Squares (below)
+aka: Froebenius norm
+? lookup
+* determinant
+measures stretch/squish of transformed volume
+zero det: collapse dimensionality ('infinite' squishing)
+determinant only defined for square metrices
+svd: extend determinant to non-square matrices
+* Systems of Linear Equations
+Ax = b
+* Eigenvector
+Ax = x
+scaled only
+* Solving Linear Systems of Equations
+in general: 0, 1, or infinite solutions
+- geometric intersection of constraint surfaces
+** Cramer's Rule
+Ax = b ==> x = A^-1*b
+exact solution, but...
+- not all matrices invertible
+- finding one is not always numerically stable (algotithmically problematic/a bitch)
+** Linear Least Squares
+find solution vector x* which minimizes error function (least squares)
+e = |Ax* - b|^2
+- aside: least squares is good because:
+-- treats under and over-approximation (pos/neg error) equally
+-- weights greater error more (squares it)
+c = |Ax* - b|^2 ==> x*^T A^T A x* - 2 x*^T A*T b + b*T b
+? understand this better
+*** solving for x*
+take matrix derivative: x* = (A^T A)^-1 A^T b
+- even if A isn't invertible, (A^T A) may be
+-- at least it's square
+? wat is matrix determinant
+*** dealing w/ degeneracy (>1 solution)
+ask for x* w/ *minimum norm* that solves system
+translate to math:
+- impose *infinitesimal* cost on |x*|
+-- less than any cost from another solution
+-- but less than the cost of any other solution w/ same error
+c = lim(e->0) [x*^T A^T A x* - 2 x*^T A*T b + b*T b + e x*^T x*]
+*** optimal solution
+x* = lim(e->0) [(A^T A + e I)^-1 A^T b]
+? when is matrix addition useful (ex. now i guess)
+?? effects of adding non-identity matrix
+** Linear Regression
+AX = B
+many vectors x_n, many results b_n
+- stack x's and b's next to eachother, form matrices X and B
+given X and B (inputs and outputs), find A (fn)
+note: add a column of 1's to X to fit affine (offset from origin)
+? understand affines (convex/affine cominations ==> line segment, line)
+*** solving 
+exact solutions rare
+- X will be square and invertible
+? understand why
+*** minimize cost/error as before
+c = Sum(n) |Ax_n - b_n|^2
+*** Wiener Filter
+matrix calculus solution
+? understand
+A* = B X^T (X X^T)^-1
+*** deal w/ degeneracy/invertibility problems
+fewer eqns than vars, duplicated eqns -> degeneracy/bad things
+c = lim (e->0) Sum(n) |Ax_n - b_n|^2 + e |A*|^2
+A* = B X^T (X X^T + e I)^-1
+aka: ridge regression
+note: e penalizes large values of A that don't do much to minimize error
+
+
+

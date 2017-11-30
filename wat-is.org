@@ -1,0 +1,386 @@
+* AI ~ wat is...
+notes on "Machine Learning for Humans"
+note: Samer goes to ucsd, maybe hit him up eventually
+** Supervised Learning I (Regression)
+regression / classification, linear regression, loss functions, overfitting, gradient descent
+predict returns on loans / advertising, predict stock market
+? failures modes (stock market crashes, etc)
+training sets
+'labeled': truth
+ex. learn labeled digits -> read checks
+*** higher learning years vs income
+y = f(x) + e
+e: epsilon
+irreducible error/uncertainty (mean zero)
+*** engineering vs learning
+engineering: write code/model yourself
+learning: learn/train model 
+w/ complex relationships, engineering a solution becomes infeasible
+writing convoluted conditional rules is hard/boring af
+ex. if/then pixel brightness -> cat, not cat
+learning: identify patterns, apply heuristics
+write *learning algorithm*
+let computer find relationships via algorithm and truthsets
+regression: continuous fn
+how much will house sell for?
+classification: categorize/label
+cat or dog
+*** regression
+predict continuous fn Y based on inputs X
+aside: continuous vs discrete
+continuous (real #): height, weight
+discrete (integer): # children
+
+features: input data
+numerical: # years worked
+categorical: job title
+
+training data: labeled
+test data: new/not previously encountered, unlabeled
+
+data: tensor
+wat is tensor?
+1d tensor: vector (1 col, n rows)
+2d tensor: matrix
+higher order tensors: 3d, 4d, nd
+TODO: review linear algebra
+*** linear regression
+simple af
+note: linear regression doesn't extrapolate to complex tasks, ex. image recognition
+for these, use deep learning
+linear regression: Ordinary Least Squares (ols)
+lin reg: *parametric method*
+parametric methods: assumes relationship between X and Y (ie. linear)
+non-parametric covered later
+? how: iter thorough higher order polynomials, fit each, take best maybe...
+
+y = B0 + B1*x + e
+B0: y-int
+B1: slope
+obvi...
+learn B0 and B1 that minimize error e
+how to:
+define cost/loss fn: measure inaccuracy
+find parms that minimize loss
+
+aside: all principles generalize to higher dimensions
+but become harder to visualize
+
+least squares:
+diff fit line and each data point
+square to normalize pos/neg, and weight large deviations greater
+eq weighting would be absolute value of differences
+avg sq diff over all points to find cost
+
+Cost = Sum(i=1, n) [(B0 + B1*xi) - yi]^2 / 2*n
+
+avg over 2*n to make derivative easier to calc
+n vs 2n: super-nerd/understanding level
+
+closed solution: use calculus
+take derivative, find minimum
+closed sols become a infeasible w/ many dimentional feature-sets
+so use gradient descent instead
+*** Gradient Descent (pretty important/ubiquitous)
+cost fn above is just a fn of B0 and B1
+take partial derivatives wrt B0 and B1
+if neg, move in that direction
+if pos, move in opposite direction
+if zero, found minima
+**** overfitting
+learning traininng data too well, model doesn't generalize to new cases
+model becomes too complex, fits noise at pertinent
+underfitting: model too simple to model relationship
+
+bias: error from simple model (underfitting): too rigid
+collapsing real-world complexity into feature-set
+variance: error from specific training set (overfitting): too flexible
+annealing tightly to specific observations, not generalizing appropriately
+**** combatting overfitting 
+obvi more training data smoothens model
+
+regularization: penalize specificity (high weighting of specific features)
+lambda coefficient: tuning parameter (tweaked by human to affect specificity) (deus ex machina)
+lambda -> hyperparameter
+
+Cost = Sum(i=1, n) [(B0 + B1*xi) - yi]^2 / 2*n + lambda*Sum(j=0,1) Bj^2
+
+note: squaring
+evenly weights pos and neg coefficients
+weights larger coefficients greater
+** Supervised Learning II (Classification)
+logistic regression, support vector machines (svm)
+*** logistic regression
+classification: predict a label
+what a this? this is dog?
+
+uses sigmoid function: prob between 0 and 1
+S(x) = 1 / (1 + e^-x)
+big x -> 1 + 0 -> 1/1 -> 1
+small x -> 1 + infinity -> 1 / infinity -> 0
+collapse x between 0 & 1 (big -> 1, small -> 0)
+
+recall simple lin reg fn
+g(x) = B0 + B1*x + e
+
+collapse g(x) between 0 & 1 (fn comp)
+fog(x)
+P(y=1) = 1 / [1 + e^-(B0+B1x)]
+
+simplify, solve for lin reg again (math...)
+ln[p / (1-p)] = B0 + B1*x + e
+aka: log-odds ratio, 'logit'
+note: B1 is slope of log-odds ratio
+
+set a *threshold* for classification
+ex. > 70% chance spam -> classify as spam, else not spam
+threshold depends on false pos/negs desired
+aside: false neg, false classification as neg (when really pos) & vice versa
+
+cost fn: penalize mislabeling
+Cost = Sum(i=0, n) Yi[log(Hb*X^i)] + (1-Yi)[log(Hb*X^i)]^2 / 2n + lambda*Sum(j=0, k) Bj^2
+weight dimensionality of X parms by exponentiating to dimension
+? what is Hb (cost scalar?)
+? why square 2nd term (wrongness?)
+perhaps to weight wrongness higher
+lambda shit at the end seen before
+prevent overfitting
+square betas, tweak lambda hyperparm
+TODO: understand logit cost fn
+*** Support Vector Machines (SVMs)
+draw line/plane/hyperplane between binary groups (as dimensionality increases)
+geometric motivation (vs probabilistic log reg above)
+? i wonder if arbitrarily-many groups divisions are possible
+? and if machine discover optimal # of groups
+perhaps this will be covered later...
+**** how-to
+maximize margin (dist between nearest points on either side to dividing line)
+**** how does it work?
+separate binary groups cleanly (perfectly)
+maximize (optimize) margin
+*optimization problem*
+uses lagrangian optimization
+TODO: learn lagrangian optimization
+TODO: learn support vectors (close to solution hyperplane)
+**** if clean separation impossible?
+1. accept misclassified objects (w/ cost fn)
+2. find higher dimensional solution
+non-linear fit (curvy line in 2d, contorted plane in 3d, etc)
+** Supervised Learning III (Non-Parametric)
+k-nearest-neighbors, decision trees, random forests
+cros-validation, hyperparameter tuning, ensemble models
+model not known beforehand
+more flexible, less interpretable
+*** k-nearest neighbors
+label data point as mean (continuous) or mode (discrete) of n nearest neighbors
+
+well-suited to complex relationships
+use pythagorean distance in n dimensions
+? how get distance if some features categorical?
+**** cross-validation
+break training data into segments
+train on all but one, test the one
+repeat for different models (change # k) and train/test on diff segments
+take most performant model
+larger k: prevent overfitting to few closest
+very large k: model becomes biased/inflexible, approaches avg of all training data
+**** strengths/when to use
+complex relationship (too much to predefine fn)
+automatically adapt to new data -> increase accuracy over time
+missing data features isn't that detrimental
+*** Decision Trees / Random Forests
+? what is / is there a difference
+balance tree -> maximize information gain at each branch
+? what does this alg look like
+  iter through all featrues in set, find most pertinent, determine split, recurse til leaves?
+**** choosing splits
+minimize entropy at each split
+TODO: lookup gini index, cross-entropy
+average leaf values to label object
+**** hyperparameters
+max-depth, max-leaf-nodes (see sci-kit learn docs)
+**** benefits
+good for mixed data (continuous/discrete)
+easy to interpret
+quick to use once deployed (log-n classification)
+**** drawbacks
+computationally expensive to train
+easy to overfit
+usually find local optimum (cannot reverse decision once split has been made)
+  not adaptive to new data
+  classification set in stone, just leaf avg changed
+*** Random Forests
+*ensemble* of decision trees
+single tree -> black & white classification
+random forest aggregates many decision trees
+
+each tree draws random subset of training data
+change # classifiers per branch
+aggregate results of all trees into random forest
+-> less bias, determine pertinent features quickly
+** Unsupervised Learning
+clustering / dimensional reduction
+k-means clustering, hierarchical clustering
+principal component analysis (pca), singlar value decomposition (svd)
+
+unlabeled data, no truthset
+determine pertinent features, group by similarity
+determine underlying structure
+-> performance is subjective, domain-specific
+ex. classify households into lifestyle groups -> target fb ads
+*** k-means clustering
+find k groups in a dataset
+calculate *centroid* of each group
+**** how-to
+1. define k random centroids
+2. add data-point, assign to nearest centroid
+   nearness is a hyperparameter, often euclidean distance as above
+3. move each centroid to center of its clusters
+   re-avg
+4. repeat 2-3 until convergence (centroids stop moving by epsilon)
+**** applications
+digit classification, etc (pixel brightness matrix)
+known groupings (numbers, ATGC, etc)
+create groupings (ad targeting, etc)
+*** heirarchical clustering
+create arbitrarily many clusterings, decide pertinence after
+**** how-to
+1. start w/ n clusters
+   each data point
+2. merge 2 closest clusters
+   -> n-1 clusters
+3. recalculate distances, find nearest neighbors
+   ex. avg distance between all members to nearest neighbor cluster members
+4. recurse til 1 cluster of all data points
+5. survey tree and draw lines -> find pertinent groupings
+**** uses
+amazon product classifications, etc
+
+*** dimensionality reduction
+reduce complexity, preserve relevant structure
+2 common techniques: pca & svd
+*** Principal Component Analysis (pca)
+change basis of high dimensional dataset
+choose basis vectors that maximize variance
+preserve complexity, while collapsing dimensionality
+*** Singular Value Decomposition (svd)
+organize data into MxN matrix
+split into MxR * RxR (diagonal) * R*N matrices
+drop small magnitude singular values (diagonal terms)
+and corresponding rows and columns
+-> shrink data, preserve most pertinent features
+TODO: understand linear algebra
+*** unsupervised uses
+data preprocessing
+use pca/svd to compress data and preserve variance/meaning
+for downstream analysis (neural net/supervised learner)
+
+** Neural Networks / Deep Learning
+still mapping f(X) = Y (labeled truthset)
+just with super-compex fn
+  where neural networks shine
+ex. X: greyscale image, Y: class vector (cat, dog, lamp, etc)
+assign weights (probabilities) to each vector component
+layers perform matrix multplication w/ *non-linear activation functions*
+  enable learning of non-linear fn
+minimize loss w/ gradient descent, just as before
+*** four limiting factors
+1. compute
+moore's law, GPUs, ASICs
+2. data 
+format (machine-readable)
+3. algorithms
+good ideas (backpropagation, cnn, lstm (below))
+4. infrastructure
+linux, TCP/IP, git, AWS, tensorflow, etc 
+*** biology
+read words: abstract to higher level (pixels to semantic meaning)
+heirarchical networks
+  low-levels detect broad features, higher levels operate on lower-level abstractions
+*artificial neurons can be floating point (non-binary)
+  is this more powerful?
+edge-detection -> groups of edges -> classification
+learn most-pertinent features (unsupervised learning happening w/in layered network)
+deep-learning features are "black boxish"
+not pre-defined, not translatable into language
+*** software
+tensorflow
+caffe
+torch
+theano
+*** Convolutional Neural Networks (cnn)
+good for image-recognition, etc
+*** Recurrent Neural Networks(rnn)
+concept of memory
+good for language, etc
+assoc w/ Long Short-Term Memory (lstm)
+*** Deep Reinforcement Learning
+most intense
+AlphaGo
+teach agent (program) to maximize reward
+gamify problem -> apply technique
+** Reinforcement Learning
+exploration/exploitation, markov decision-processes, q-learning, policy learning, deep reinforcement learning
+
+no truthset, no training data
+*learn from experience*
+trial and error, good/bad action, long-term reward maximization
+*** exploration vs exploitation
+leaving comfort zone vs missing out
+epsilon: reward / risk percentage
+start out low-e (explore a lot)
+tend toward higher-e (stick to known rewards)
+*parallels to life
+  always keep growing, leaving/expanding your comfort zone
+*** Markov Decision Process (mdp)
+specified transition probabilities from state to state
+1. finite set of states
+possible maze positions
+2. set of available actions
+forward/back in corridor, u/d/r/l at crossroads
+3. transition between states (w/ assoc probabilities)
+move in maze, change pos
+attack in pokemon (%hit, &miss)
+4. reward assoc w/ transition
+mostly nil, long-term pos/neg
+5. discount factor (present vs future reward weighting) (called gamma (i think))
+between 0 & 1
+ex. weight 0.9
++5 reward, 3 steps away -> 0.9^3 * 5 -> weighted reward
+6. memorylessness
+current state contains all useful information
+past moves of mouse in maze erased from consideration
+*past doesn't matter, only your action in the present moment*
+**** equation
+Sum(t=0, infinity) gamma^t * r[x(t), a(t)]
+maximize reward over time
+gamma^t: decays future reward value
+r: reward function (fn of position and action at each moment in time)
+x(t): position at specific time
+a(t): action at specific time
+*** q-learning
+chooses action based on *action-value function*
+q-function: takes in state and action, returns expected reward of action (and all subsequent (optimal) actions)
+yields more accurate future value prediction as you explore more (q-fn anneals over time)
+Q(St,At) = old value + learning rate * {reward * discount factor * optimal future extimate - old value}
+learning rate: how aggresively to change extimate
+subtract old value to get difference in value gain from specific action
+choose action based on *action-selection strategy* (epsilon: reward/risk, now/later)
+*** policy learning
+direct mapping of state to action
+when x happens, do y
+*** Deep Q-Networks (dqn), Asyncronous Advantage Actor-Critic (a3c)
+approximate q-functions w/ deep neural networks
+**** memory augmentation
+experience replay, like dreaming to replay/learn from experiences
+avoid overfitting to most recent experiences
+rnns augmenting dqns
+birds-eye view vs immediate state
+(memory vs stateless markov decision-making)
+**** Asyncronous Advantage Actor-Critic (a3c)
+best of both approaches
+actor: policy network (decides action)
+critic: (determines value)
+* Spiritual AI
+depart from simple reward settings, into the world
+how to mathematically consider higher principles?
