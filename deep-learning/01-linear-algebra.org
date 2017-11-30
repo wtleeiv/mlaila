@@ -1,0 +1,18 @@
+broadcasting
+C = A + b
+- add vect b to wach row of matrix a
+hadamard product
+- element-wise multiplication of matrices
+Inverse Matrices
+- only exist if matrix is one-to-one
+-- no/infinite solutions possible => no inverse
+Column Space (range)
+- linear combination of matrix columns
+-- n >= m (# cols >= # rows): solution possible
+-- redundant columns negate extra columns (same cols 2x2 -> 2x1)
+linear independence
+- no vector in set can be expressed as linear combo of other vectors in set
+-- linear combo: sum of unique scalar mult each thing
+- for a matrix to span R^n, req n linearly independent columns
+
+pg. 37 Norms

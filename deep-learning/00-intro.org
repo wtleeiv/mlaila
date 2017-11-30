@@ -1,0 +1,53 @@
+* History
+Early days: intellectually difficult for humans
+- logical, formal rulesets (a la lisp)
+True challenge: easy for humans, but hard to describe
+how to tackle:
+- learn and understand via *heirarchy of concepts*
+- many-layered concepts: deep-learning
+** how to get informal knowledge (about the world) into a computer
+*** how to solve riddles (fluid inference, etc)
+hard-coded knowledge: bullshit
+- cyc (lisp)
+** ai must be able to learn on its own
+*** extract patterns from raw data (machine learning)
+**** logistic regression: cesarean delivery or nah 
+**** naive bayes: spam classification
+** *simple* machine learning
+*** heavily dependent on representation of data
+**** feature-set
+*** simple algs cannot affect how features are defined
+** deep learning
+*** discover features, as well as mapping 
+** computer programs that improve with experience over time
+deep learning names:
+- cybernetics (40s-60s)
+- connectionism (80s-90s)
+- deep learning (2006-)
+common learning algorithm can be adapted to many fields
+- natural language processing (NLP)
+- vision
+- motion planning
+- speech recognition
+biology
+- inspires architecture
+- not algorithms (not enough known...)
+fields
+- deep learning: build intelligent systems
+- computational neuroscience: build better models of brain functionality
+connectionism
+- *distributed representation*
+-- color: red, blue, green
+-- object: car, truck, bird
+Long Short-Term Memory (LSTM)
+- modeling *sequences* w/ neural nets
+-- NLP, etc
+humans: ~10,000 connections/neuron
+at current rate, reach human # total neurons 2050
+- right now, less than frog :/ (ribbit)
+deep learning
+- human brain
+- statistics
+- applied math
+
+
