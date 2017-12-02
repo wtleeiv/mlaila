@@ -61,7 +61,30 @@ eigendecomposition
 -- derivation
 A V => V Lambda
 A = V Lambda V^-1
-
-
-
-
+* Singular Value Decomposition
+A = U D V^T
+A: MxN
+U: MxM => eigenvectors of A A^T (?)
+D: MxN
+V: NxN => eigenvectors of A^T A
+* Moore-Penrose Pseudoinverse (I think this is used in my other notes...look it up)
+pseudo-generalization of inverse to non-square matrices
+A^+ = lim(a->0) (A^T A + aI)^-1 A^T
+for practicality, use SVD
+A+ ~= V D^+ U^T
+D^+: take reciprocal of diag elems, then transpose
+solving: Ax = y => x = A^+ y
+- yields one of many possible solutions
+-- the one with minimal norm
+* Trace
+sum of diag elems
+Froebenius norm = sqrt[ Tr(A^T A) ]
+trace cycling: move last to front
+Tr(ABC) = Tr(CAB) = Tr(BCA)
+- works for matrices of any dimension
+? don't really see that much utility here, but whatevs
+* Determinant
+*product of all eigenvalues*
+change in length/area/volume/hyper...
+* Principal Component Analysis
+can be derived from stuff above

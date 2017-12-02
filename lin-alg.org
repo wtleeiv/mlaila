@@ -77,6 +77,11 @@ c = lim (e->0) Sum(n) |Ax_n - b_n|^2 + e |A*|^2
 A* = B X^T (X X^T + e I)^-1
 aka: ridge regression
 note: e penalizes large values of A that don't do much to minimize error
-
-
-
+* Change of Basis
+basis
+- set of linearly-independent vectors that span space
+- # vects = # dims (linearly-independent span)
+components
+- scalars for each basis vector
+-- for v in V, unique list of components that define it
+-- since basis is linearly-independent, just invert matrix
